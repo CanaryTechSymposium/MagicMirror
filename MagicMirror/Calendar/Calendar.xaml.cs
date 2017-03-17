@@ -35,7 +35,7 @@ namespace MagicMirror.Calendar
             start = new DateTime(2017, 3, 17, 14, 0, 0);
             AddNextEvent("Clean up", start, start.AddMinutes(30));
             start = new DateTime(2017, 3, 18, 18, 0, 0);
-            AddNextEvent("Part at Gary's", start, start.AddHours(3));
+            AddNextEvent("Party at Gary's", start, start.AddHours(3));
             start = new DateTime(2017, 3, 20, 12, 0, 0);
             AddNextEvent("Finish potatoe chips", start, start.AddHours(1));
         }
