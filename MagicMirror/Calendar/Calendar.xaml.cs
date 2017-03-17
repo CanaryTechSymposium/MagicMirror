@@ -30,49 +30,56 @@ namespace MagicMirror.Calendar
             Days = new ObservableCollection<Day>();
 
             // Test data
-            var day = new Day();
-            day.DayName = "Today";
-            var ev = new Event();
-            ev.Description = "Tech Symposium";
-            ev.Start = new DateTime(2017, 3, 17, 11, 0, 0);
-            ev.End = ev.Start.AddHours(2);
-            day.Events.Add(ev);
-            ev = new Event();
-            ev.Description = "Clean up";
-            ev.Start = new DateTime(2017, 3, 17, 14, 0, 0);
-            ev.End = ev.Start.AddMinutes(30);
-            day.Events.Add(ev);
-            Days.Add(day);
-
-            day = new Day();
-            day.DayName = "Tomorrow";
-            ev = new Event();
-            ev.Description = "Part at Gary's";
-            ev.Start = new DateTime(2017, 3, 18, 18, 0, 0);
-            ev.End = ev.Start.AddHours(3);
-            day.Events.Add(ev);
-            Days.Add(day);
-
-            day = new Day();
-            day.DayName = "March 20, 2017";
-            ev = new Event();
-            ev.Description = "Finish potatoe chips";
-            ev.Start = new DateTime(2017, 3, 20, 12, 0, 0);
-            ev.End = ev.Start.AddHours(1);
-            day.Events.Add(ev);
-            Days.Add(day);
+            var start = new DateTime(2017, 3, 17, 11, 0, 0);
+            AddNextEvent("Tech Symposium", start, start.AddHours(2));
+            start = new DateTime(2017, 3, 17, 14, 0, 0);
+            AddNextEvent("Clean up", start, start.AddMinutes(30));
+            start = new DateTime(2017, 3, 18, 18, 0, 0);
+            AddNextEvent("Part at Gary's", start, start.AddHours(3));
+            start = new DateTime(2017, 3, 20, 12, 0, 0);
+            AddNextEvent("Finish potatoe chips", start, start.AddHours(1));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void AddNextEvent(string description, DateTime start, DateTime end)
+        {
+            // Is this event the same day as previous event or a new day?
+            var day = Days.LastOrDefault();
+            if (day == null || day.Date != start.Date)
+            {
+                day = new Day(start);
+                Days.Add(day);
+            }
+
+            var ev = new Event();
+            ev.Description = description;
+            ev.Start = start;
+            ev.End = end;
+            day.Events.Add(ev);
+        }
     }
 
     public class Day
     {
-        public string DayName { get; set; }
+        public DateTime Date { get; set; }
+        public string DayName
+        {
+            get
+            {
+                if (Date == DateTime.Now.Date)
+                    return "Today";
+                else if (Date == DateTime.Now.Date.AddDays(1))
+                    return "Tomorrow";
+                else
+                    return Date.ToString("MMMM d, yyyy");
+            }
+        }
         public List<Event> Events { get; set; }
 
-        public Day()
+        public Day(DateTime date)
         {
+            Date = date.Date;
             Events = new List<Event>();
         }
     }
