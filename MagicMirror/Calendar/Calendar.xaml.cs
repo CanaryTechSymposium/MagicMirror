@@ -21,6 +21,11 @@ namespace MagicMirror.Calendar
 {
     public partial class Calendar : UserControl, INotifyPropertyChanged
     {
+        private ICalendarEventInterface _calendarProvider;
+
+        private DispatcherTimer _updateTimer;
+        private TimeSpan _updateRate;
+
         public ObservableCollection<Day> Days { get; set; }
         public Calendar()
         {
@@ -29,15 +34,58 @@ namespace MagicMirror.Calendar
 
             Days = new ObservableCollection<Day>();
 
-            // Test data
-            var start = new DateTime(2017, 3, 17, 11, 0, 0);
-            AddNextEvent("Tech Symposium", start, start.AddHours(2));
-            start = new DateTime(2017, 3, 17, 14, 0, 0);
-            AddNextEvent("Clean up", start, start.AddMinutes(30));
-            start = new DateTime(2017, 3, 18, 18, 0, 0);
-            AddNextEvent("Part at Gary's", start, start.AddHours(3));
-            start = new DateTime(2017, 3, 20, 12, 0, 0);
-            AddNextEvent("Finish potatoe chips", start, start.AddHours(1));
+            _calendarProvider = new ExchangeCalendarProvider();
+
+            _updateTimer = null;
+            _updateRate = new TimeSpan(0, 0, 15);
+
+            StartTimer();
+        }
+
+        public void StartTimer()
+        {
+            if (_updateTimer != null)
+                return;
+
+            _updateTimer = new DispatcherTimer();
+            _updateTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            _updateTimer.Tick += TimerTick;
+            _updateTimer.Start();
+        }
+
+        public void StopTimer()
+        {
+            if (_updateTimer != null)
+            {
+                _updateTimer.Stop();
+                _updateTimer = null;
+            }
+        }
+
+        private void TimerTick(object sender, object e)
+        {
+            _updateTimer.Stop();
+
+            CheckForChanges();
+
+            // restart _updateTimer if it hasn't been stopped
+            if (_updateTimer != null)
+            {
+                _updateTimer.Interval = _updateRate;
+                _updateTimer.Start();
+            }
+        }
+
+        private void CheckForChanges()
+        {
+            var events = _calendarProvider.GetCurrentEvents();
+
+            Days.Clear();
+
+            foreach (var item in events.OrderBy(p=>p.Start))
+            {
+                AddNextEvent(item.Description, item.Start, item.End);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
