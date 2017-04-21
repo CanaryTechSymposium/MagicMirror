@@ -94,8 +94,13 @@ namespace MagicMirror.Calendar.ExchangeProvider
 
                     };
 
-                IdentityClientApp = new PublicClientApplication(clientId);
-                AuthenticationResult authResult = await IdentityClientApp.AcquireTokenSilentAsync(scopes);
+                ConfidentialClientApplication cca = new ConfidentialClientApplication(
+                        clientId, returnUrl, new ClientCredential("yZcrtTFBuWrDvAgixP8Cjsi"), null);
+                var authResult = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, null);
+
+                //IdentityClientApp = new PublicClientApplication(clientId);
+                //AuthenticationResult authResult = await IdentityClientApp.AcquireTokenSilentAsync(scopes);
+
                 //AuthenticationResult authResult = await IdentityClientApp.AcquireTokenAsync(scopes);
 
                 TokenForUser = authResult.Token;

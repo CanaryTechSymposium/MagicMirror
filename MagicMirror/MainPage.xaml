@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MagicMirror"
     xmlns:calendar="using:MagicMirror.Calendar"
+    xmlns:weather="using:MagicMirror.Weather"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" FontSize="36" Width="1080" Height="1920" >
@@ -25,5 +26,7 @@
             <Button x:Name="btnClickMe" Content="Click Me!"  FontSize="36" Click="btnClickMe_Click" HorizontalAlignment="Center" Foreground="White" Background="Gray" />
             <TextBlock x:Name="tbkHello" Margin="0" Text="Why hello there!"  TextAlignment="Center" FontSize="36" />
         </StackPanel>
+        <!--<weather:WeatherWidgetView Grid.Column="2" />-->
+
     </Grid>
 </Page>

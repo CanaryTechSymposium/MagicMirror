@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,18 +12,18 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using Windows.Storage;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MagicMirror.Weather
 {
-    public enum ContentState { Undefined, Weather, Temp, FeelsLike, Humidity, Wind, Precip, Visibility }
+   public enum ContentState { Undefined, Weather, Temp, FeelsLike, Humidity, Wind, Precip, Visibility}
 
 
-    public class WeatherWidgetViewModel : INotifyPropertyChanged
+    public class WeatherWidgetViewModel: INotifyPropertyChanged
     {
         private Timer timer;
         private HttpClientHandler handler;
@@ -35,7 +38,7 @@ namespace MagicMirror.Weather
             isDataAvailable = false;
 
             ExecuteGetWeatherCommand = new ExecuteCommand(this);
-            timer = new Timer(CycleNextDisplayText, null, 1000, 7000);
+            timer = new Timer(CycleNextDisplayText, null, 1000, 7000 );
 
             handler = new HttpClientHandler();
             handler.UseDefaultCredentials = true;
@@ -170,8 +173,7 @@ namespace MagicMirror.Weather
             {
                 weathercondition = value;
                 RaisePropertyChanged("WeatherConditions");
-                IsDataAvailable = (weathercondition != null);
-            }
+                IsDataAvailable = (weathercondition != null);  }
         }
 
         private string lastDisplayProperty { get; set; }
@@ -233,15 +235,15 @@ namespace MagicMirror.Weather
         #region INotifyPropertyChanged Members
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected async void RaisePropertyChanged(String propertyName)
+        protected void RaisePropertyChanged(String propertyName)
         {
 
-            //if (this.PropertyChanged != null)
-            //    await System.ServiceModel.Dispatcher.  //( //this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 
-
+        
     }
 
     public static class ContentStateEnumExtension
@@ -271,6 +273,165 @@ namespace MagicMirror.Weather
     }
 
 
+    public class ResponseHeader
+    {
+        public ResponseHeader()
+        {
+            features = new Features();
+        }
+
+        public string version { get; set; }
+        public string termsofService { get; set; }
+        
+        public Features features { get; set; }
+    }
+
+    public class Features
+    {
+        public string conditions { get; set; }
+    }
+
+    public class ObservationResponse
+    {
+        public ObservationResponse()
+        {
+            response = new ResponseHeader();
+            current_observation = new WeatherCondition();
+        }
+
+        public ResponseHeader response { get; set; }
+        public WeatherCondition current_observation { get; set; }
+    }
+
+    public class WUImage
+    {
+        public string url { get; set; }
+        public string title { get; set; }
+        public string link { get; set; }
+        public override string ToString()
+        {
+            if (!string.IsNullOrEmpty(title))
+                return title;
+            else
+                return base.ToString();
+        }
+    }
+
+    public class DisplayLocation
+    {
+        public string full { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string state_name { get; set; }
+        public string country { get; set; }
+        public string country_iso3166 { get; set; }
+        public string zip { get; set; }
+        public string magic { get; set; }
+        public string wmo { get; set; }
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string elevation { get; set; }
+        public override string ToString()
+        {
+            if (!string.IsNullOrEmpty(full))
+                return full;
+            else
+                return base.ToString();
+        }
+    }
+
+    public class ObservationLocation
+    {
+        public string full { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string country { get; set; }
+        public string country_iso3166 { get; set; }
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string elevation { get; set; }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrEmpty(full))
+                return full;
+            else
+                return base.ToString();
+        }
+    }
+
+    public class Estimated
+    {
+
+    }
+
+    public class WeatherCondition
+    {
+        public WeatherCondition()
+        {
+            image = new WUImage();
+            display_location = new DisplayLocation();
+            observation_location = new ObservationLocation();
+            estimated = new Estimated();
+        }
+        public WUImage image { get; set; }
+        public DisplayLocation display_location { get; set; }
+        public ObservationLocation observation_location { get; set; }
+        public Estimated estimated { get; set; }
+        public string station_id { get; set; }
+        public string observation_time { get; set; }
+        public string observation_time_rfc822 { get; set; }
+        public string observation_epoch { get; set; }
+        public string local_time_rfc822 { get; set; }
+        public string local_epoch { get; set; }
+        public string local_tz_short { get; set; }
+        public string local_tz_long { get; set; }
+        public string local_tz_offset { get; set; }
+        public string weather { get; set; }
+        public string temperature_string { get; set; }
+        public string temp_f { get; set; }
+        public string temp_c { get; set; }
+        public string relative_humidity { get; set; }
+        public string wind_string { get; set; }
+        public string wind_dir { get; set; }
+        public string wind_degrees { get; set; }
+        public string wind_mph { get; set; }
+        public string wind_gust_mph { get; set; }
+        public string wind_kph { get; set; }
+        public string wind_gust_kph { get; set; }
+        public string pressure_mb { get; set; }
+        public string pressure_in { get; set; }
+        public string pressure_trend { get; set; }
+        public string dewpoint_string { get; set; }
+        public string dewpoint_f { get; set; }
+        public string dewpoint_c { get; set; }
+        public string heat_index_string { get; set; }
+        public string heat_index_f { get; set; }
+        public string heat_index_c { get; set; }
+        public string windchill_string { get; set; }
+        public string windchill_f { get; set; }
+        public string windchill_c { get; set; }
+        public string feelslike_string { get; set; }
+        public string feelslike_f { get; set; }
+        public string feelslike_c { get; set; }
+        public string visibility_mi { get; set; }
+        public string visibility_km { get; set; }
+        public string solarradiation { get; set; }
+        public string UV { get; set; }
+        public string precip_1hr_string { get; set; }
+        public string precip_1hr_in { get; set; }
+        public string precip_1hr_metric { get; set; }
+        public string precip_today_string { get; set; }
+        public string precip_today_in { get; set; }
+        public string precip_today_metric { get; set; }
+        public string icon { get; set; }
+        public string icon_url { get; set; }
+        public string forecast_url { get; set; }
+        public string history_url { get; set; }
+        public string ob_url { get; set; }
+
+        public string nowcast { get; set; }
+    }
 
     public class ExecuteCommand : ICommand
     {
@@ -294,15 +455,14 @@ namespace MagicMirror.Weather
             viewmodel.Location = viewmodel.WeatherConditions.display_location.full;
             viewmodel.Status = viewmodel.WeatherConditions.icon;
             viewmodel.Temperature = Math.Round(Convert.ToDecimal(viewmodel.WeatherConditions.temp_f)).ToString();
-            
-            //Application.Current.Dispatcher.Invoke((Action)delegate
-            //{
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
                 BitmapImage btm = new BitmapImage(new Uri(viewmodel.WeatherConditions.icon_url, UriKind.Absolute));
                 Image img = new Image();
                 img.Source = btm;
                 img.Stretch = Stretch.Uniform;
                 viewmodel.StatusImage = img;
-            //});
+            });
             viewmodel.CycleNextDisplayText(null);
 
         }
