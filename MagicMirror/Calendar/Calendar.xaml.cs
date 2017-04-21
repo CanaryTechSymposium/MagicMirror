@@ -19,12 +19,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MagicMirror.Calendar
 {
-    public partial class Calendar : UserControl, INotifyPropertyChanged
+    public partial class Calendar : UserControl, INotifyPropertyChanged, ICalendarEventInterface
     {
-        private ICalendarEventInterface _calendarProvider;
-
-        private DispatcherTimer _updateTimer;
-        private TimeSpan _updateRate;
+        private MagicMirror.Calendar.ExchangeProvider.ExchangeCalendarProvider _calendarProvider;
 
         public ObservableCollection<Day> Days { get; set; }
         public Calendar()
@@ -34,56 +31,18 @@ namespace MagicMirror.Calendar
 
             Days = new ObservableCollection<Day>();
 
-            _calendarProvider = new ExchangeCalendarProvider();
-
-            _updateTimer = null;
-            _updateRate = new TimeSpan(0, 0, 15);
-
-            StartTimer();
+            _calendarProvider = new MagicMirror.Calendar.ExchangeProvider.ExchangeCalendarProvider(this, new TimeSpan(0, 0, 15));
         }
 
-        public void StartTimer()
+        public void SetCurrentEvents(List<CalendarEvent> events)
         {
-            if (_updateTimer != null)
-                return;
-
-            _updateTimer = new DispatcherTimer();
-            _updateTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            _updateTimer.Tick += TimerTick;
-            _updateTimer.Start();
-        }
-
-        public void StopTimer()
-        {
-            if (_updateTimer != null)
-            {
-                _updateTimer.Stop();
-                _updateTimer = null;
-            }
-        }
-
-        private void TimerTick(object sender, object e)
-        {
-            _updateTimer.Stop();
-
-            CheckForChanges();
-
-            // restart _updateTimer if it hasn't been stopped
-            if (_updateTimer != null)
-            {
-                _updateTimer.Interval = _updateRate;
-                _updateTimer.Start();
-            }
-        }
-
-        private void CheckForChanges()
-        {
-            var events = _calendarProvider.GetCurrentEvents();
-
             Days.Clear();
 
             foreach (var item in events.OrderBy(p=>p.Start))
             {
+                if (item.Start < DateTime.Now.Date)
+                    continue;
+
                 AddNextEvent(item.Description, item.Start, item.End);
             }
         }

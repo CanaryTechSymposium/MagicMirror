@@ -5,4 +5,9 @@
     xmlns:local="using:MagicMirror"
     RequestedTheme="Light">
 
+    <Application.Resources>
+        <x:String x:Key="ida:ClientID">7cf7926e-57ff-434a-807b-e0787a1ca481</x:String>
+        <x:String x:Key="ida:ReturnUrl">https://login.microsoftonline.com/common/oauth2/nativeclient</x:String>
+    </Application.Resources>
+
 </Application>

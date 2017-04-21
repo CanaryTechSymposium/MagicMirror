@@ -100,7 +100,8 @@
       <DependentUpon>Calendar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Calendar\CalendarEventInterface.cs" />
-    <Compile Include="Calendar\ExchangeCalendarProvider.cs" />
+    <Compile Include="Calendar\ExchangeProvider\AuthenticationHelper.cs" />
+    <Compile Include="Calendar\ExchangeProvider\ExchangeCalendarProvider.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

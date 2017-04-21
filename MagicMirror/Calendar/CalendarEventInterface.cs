@@ -8,7 +8,7 @@ namespace MagicMirror.Calendar
 {
     public interface ICalendarEventInterface
     {
-        List<CalendarEvent> GetCurrentEvents();
+        void SetCurrentEvents(List<CalendarEvent> events);
     }
 
     public class CalendarEvent
