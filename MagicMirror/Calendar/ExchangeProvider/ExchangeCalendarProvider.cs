@@ -19,17 +19,6 @@ namespace MagicMirror.Calendar.ExchangeProvider
             _calendar = calendar;
             _updateRate = updateRate;
 
-            //List<CalendarEvent> events = new List<MagicMirror.Calendar.CalendarEvent>();
-            //var myEvents = GetEventsAsync();
-            //myEvents.Wait();
-            //if (myEvents.Result != null)
-            //{
-            //    foreach (var item in myEvents.Result)
-            //    {
-            //        events.Add(new CalendarEvent { Description = item.Subject, Start = DateTime.Parse(item.Start.DateTime), End = DateTime.Parse(item.End.DateTime) });
-            //    }
-            //}
-
             StartTimer();
         }
 
@@ -77,14 +66,6 @@ namespace MagicMirror.Calendar.ExchangeProvider
             //events.Add(new CalendarEvent { Description = "Finish potatoe chips", Start = start, End = start.AddHours(1) });
 
             GetEventsAsync();
-            //myEvents.Wait();
-            //if (myEvents.Result != null)
-            //{
-            //    foreach (var item in myEvents.Result)
-            //    {
-            //        events.Add(new CalendarEvent { Description = item.Subject, Start = DateTime.Parse(item.Start.DateTime), End = DateTime.Parse(item.End.DateTime) });
-            //    }
-            //}
 
             return events;
         }
@@ -101,7 +82,7 @@ namespace MagicMirror.Calendar.ExchangeProvider
                 List<QueryOption> options = new List<QueryOption>();
                 options.Add(new QueryOption("startDateTime", DateTime.Now.ToString("o")));
                 options.Add(new QueryOption("endDateTime", DateTime.Now.AddDays(30).ToString("o")));
-                var myEvents = await graphClient.Me.Events.Request(options).GetAsync();
+                var myEvents = await graphClient.Me.CalendarView.Request(options).GetAsync();
 
                 foreach (var item in myEvents)
                 {

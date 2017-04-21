@@ -44,9 +44,10 @@ namespace MagicMirror.Calendar.ExchangeProvider
                             async (requestMessage) =>
                             {
                                 var token = await GetTokenForUserAsync();
-                                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
+                                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                                 // This header has been added to identify our sample in the Microsoft Graph service.  If extracting this code for your project please remove.
-                                requestMessage.Headers.Add("SampleID", "uwp-csharp-snippets-sample");
+                                //requestMessage.Headers.Add("SampleID", "uwp-csharp-snippets-sample");
+                                requestMessage.Headers.Add("Prefer", "outlook.timezone=\"Eastern Standard Time\"");
 
                             }));
                     return graphClient;

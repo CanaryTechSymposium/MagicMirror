@@ -40,7 +40,7 @@ namespace MagicMirror.Calendar
 
             foreach (var item in events.OrderBy(p=>p.Start))
             {
-                if (item.Start < DateTime.Now.Date)
+                if (item.Start < DateTime.Now)
                     continue;
 
                 AddNextEvent(item.Description, item.Start, item.End);
