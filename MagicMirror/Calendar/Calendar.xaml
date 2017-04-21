@@ -33,7 +33,7 @@
                         <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{x:Bind Events}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="local:Event">
-                                    <TextBlock Padding="10, 0, 0, 0" Text="{x:Bind Description}" Foreground="AntiqueWhite" FontSize="16" FontWeight="Bold" />
+                                    <TextBlock Padding="10, 0, 0, 0" Text="{x:Bind Description}" Foreground="AntiqueWhite" FontSize="16" FontWeight="Bold" TextWrapping="WrapWholeWords" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
