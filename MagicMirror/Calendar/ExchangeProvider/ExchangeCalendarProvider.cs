@@ -87,12 +87,20 @@ namespace MagicMirror.Calendar.ExchangeProvider
                 options.Add(new QueryOption("endDateTime", DateTime.Now.AddDays(30).ToString("o")));
                 var myEvents = await graphClient.Users[calendarUserId].CalendarView.Request(options).GetAsync();
 
-                foreach (var item in myEvents)
+                while (true)
                 {
-                    if (item.IsCancelled.HasValue && item.IsCancelled.Value)
-                        continue;
+                    foreach (var item in myEvents)
+                    {
+                        if (item.IsCancelled.HasValue && item.IsCancelled.Value)
+                            continue;
 
-                    events.Add(new CalendarEvent { Description = item.Subject, Start = DateTime.Parse(item.Start.DateTime), End = DateTime.Parse(item.End.DateTime), IsAllDay = item.IsAllDay.HasValue ? item.IsAllDay.Value : false });
+                        events.Add(new CalendarEvent { Description = item.Subject, Start = DateTime.Parse(item.Start.DateTime), End = DateTime.Parse(item.End.DateTime), IsAllDay = item.IsAllDay.HasValue ? item.IsAllDay.Value : false });
+                    }
+
+                    if (myEvents.NextPageRequest == null)
+                        break;
+
+                    myEvents = await myEvents.NextPageRequest.GetAsync();
                 }
             }
 

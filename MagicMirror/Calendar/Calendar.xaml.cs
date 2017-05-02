@@ -31,7 +31,7 @@ namespace MagicMirror.Calendar
 
             Days = new ObservableCollection<Day>();
 
-            _calendarProvider = new MagicMirror.Calendar.ExchangeProvider.ExchangeCalendarProvider(this, new TimeSpan(0, 0, 15));
+            _calendarProvider = new MagicMirror.Calendar.ExchangeProvider.ExchangeCalendarProvider(this, new TimeSpan(0, 5, 0));
         }
 
         public void SetCurrentEvents(List<CalendarEvent> events)
