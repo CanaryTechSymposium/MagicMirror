@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Graph;
 using Windows.UI.Xaml;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MagicMirror.Calendar.ExchangeProvider
 {
@@ -13,6 +14,8 @@ namespace MagicMirror.Calendar.ExchangeProvider
         private ICalendarEventInterface _calendar;
         private DispatcherTimer _updateTimer;
         private TimeSpan _updateRate;
+        private string calendarUserId = App.Current.Resources["ida:CalendarUserId"].ToString();
+
 
         public ExchangeCalendarProvider(ICalendarEventInterface calendar, TimeSpan updateRate)
         {
@@ -82,17 +85,24 @@ namespace MagicMirror.Calendar.ExchangeProvider
                 List<QueryOption> options = new List<QueryOption>();
                 options.Add(new QueryOption("startDateTime", DateTime.Now.ToString("o")));
                 options.Add(new QueryOption("endDateTime", DateTime.Now.AddDays(30).ToString("o")));
-                var myEvents = await graphClient.Me.CalendarView.Request(options).GetAsync();
+                var myEvents = await graphClient.Users[calendarUserId].CalendarView.Request(options).GetAsync();
 
                 foreach (var item in myEvents)
                 {
-                    events.Add(new CalendarEvent { Description = item.Subject, Start = DateTime.Parse(item.Start.DateTime), End = DateTime.Parse(item.End.DateTime) });
+                    if (item.IsCancelled.HasValue && item.IsCancelled.Value)
+                        continue;
+
+                    events.Add(new CalendarEvent { Description = item.Subject, Start = DateTime.Parse(item.Start.DateTime), End = DateTime.Parse(item.End.DateTime), IsAllDay = item.IsAllDay.HasValue ? item.IsAllDay.Value : false });
                 }
             }
 
             catch (ServiceException e)
             {
-                //Debug.WriteLine("We could not get the current user's events: " + e.Error.Message);
+                events.Add(new CalendarEvent { Description = string.Format("Could not get company events: {0}", e.Error.Message), Start = DateTime.Now, End = DateTime.Now });
+            }
+            catch (Exception e)
+            {
+                events.Add(new CalendarEvent { Description = string.Format("Could not get company events: {0}", e.Message), Start = DateTime.Now, End = DateTime.Now });
             }
 
             // Callback into the calendar source.

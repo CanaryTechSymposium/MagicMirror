@@ -38,31 +38,44 @@ namespace MagicMirror.Calendar
         {
             Days.Clear();
 
-            foreach (var item in events.OrderBy(p=>p.Start))
+            List<Event> expandedEvents = new List<Event>();
+
+            // Expand out multiday events.
+            foreach (var item in events)
             {
-                if (item.Start < DateTime.Now)
+                for(var date = item.Start; date < item.End; date = date.Date.AddDays(1))
+                {
+                    var ev = new Event();
+                    ev.Description = item.Description;
+                    ev.Start = new DateTime(Math.Max(item.Start.Ticks, date.Ticks));
+                    ev.End = new DateTime(Math.Min(item.End.Ticks, date.AddDays(1).Ticks));
+                    ev.IsAllDay = item.IsAllDay || (ev.Start == ev.Start.Date && ev.End >= ev.Start.Date.AddDays(1));
+
+                    expandedEvents.Add(ev);
+                }
+            }
+
+            foreach (var item in expandedEvents.OrderBy(p => p.Start))
+            {
+                if (item.End < DateTime.Now)
                     continue;
 
-                AddNextEvent(item.Description, item.Start, item.End);
+                AddNextEvent(item);
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void AddNextEvent(string description, DateTime start, DateTime end)
+        private void AddNextEvent(Event ev)
         {
             // Is this event the same day as previous event or a new day?
             var day = Days.LastOrDefault();
-            if (day == null || day.Date != start.Date)
+            if (day == null || day.Date != ev.Start.Date)
             {
-                day = new Day(start);
+                day = new Day(ev.Start);
                 Days.Add(day);
             }
 
-            var ev = new Event();
-            ev.Description = description;
-            ev.Start = start;
-            ev.End = end;
             day.Events.Add(ev);
         }
     }
@@ -98,10 +111,14 @@ namespace MagicMirror.Calendar
         {
             get
             {
+                if (IsAllDay)
+                    return "All Day";
+
                 return Start.ToString("t");
             }
         }
         public DateTime End { get; set; }
         public string Description { get; set; }
+        public bool IsAllDay { get; set; }
     }
 }
