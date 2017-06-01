@@ -26,17 +26,5 @@ namespace MagicMirror
         {
             this.InitializeComponent();
         }
-
-        private void btnClickMe_Click(object sender, RoutedEventArgs e)
-        {
-            if (tbkHello.Visibility.Equals(Visibility.Visible))
-            {
-                tbkHello.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                tbkHello.Visibility = Visibility.Visible;
-            }
-        }
     }
 }

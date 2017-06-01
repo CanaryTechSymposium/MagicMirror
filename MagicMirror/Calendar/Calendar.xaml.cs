@@ -87,12 +87,17 @@ namespace MagicMirror.Calendar
         {
             get
             {
+                string dateFormat = "MMM d, yyyy";
+                string dayFormat;
+
                 if (Date == DateTime.Now.Date)
-                    return "Today";
+                    dayFormat = string.Format("Today - {{0:{0}}}", dateFormat);
                 else if (Date == DateTime.Now.Date.AddDays(1))
-                    return "Tomorrow";
+                    dayFormat = string.Format("Tomorrow - {{0:{0}}}", dateFormat);
                 else
-                    return Date.ToString("MMMM d, yyyy");
+                    dayFormat = string.Format("{{0:ddd - {0}}}", dateFormat);
+
+                return string.Format(dayFormat, Date);
             }
         }
         public List<Event> Events { get; set; }

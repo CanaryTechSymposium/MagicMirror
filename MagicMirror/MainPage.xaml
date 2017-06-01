@@ -7,26 +7,16 @@
     xmlns:weather="using:MagicMirror.Weather"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" FontSize="36" Width="1080" Height="1920" >
+    mc:Ignorable="d">
 
     <Grid Background="Black">
-        <Grid.Resources>
-            <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="White"/>
-            </Style>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <calendar:Calendar Grid.Column="0" />
-        <TextBlock x:Name="tbkTitle" Grid.Column="1" Margin="0" TextWrapping="Wrap" Text="Mirror Mirror on the Canary Wall . . ." VerticalAlignment="Top" TextAlignment="Center"  />
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="btnClickMe" Content="Click Me!"  FontSize="36" Click="btnClickMe_Click" HorizontalAlignment="Center" Foreground="White" Background="Gray" />
-            <TextBlock x:Name="tbkHello" Margin="0" Text="Why hello there!"  TextAlignment="Center" FontSize="36" />
-        </StackPanel>
-        <!--<weather:WeatherWidgetView Grid.Column="2" />-->
+        <!--<weather:WeatherWidgetView Grid.Column="2" /> -->
 
     </Grid>
 </Page>
