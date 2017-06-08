@@ -103,6 +103,9 @@
     <Compile Include="Calendar\CalendarEventInterface.cs" />
     <Compile Include="Calendar\ExchangeProvider\AuthenticationHelper.cs" />
     <Compile Include="Calendar\ExchangeProvider\ExchangeCalendarProvider.cs" />
+    <Compile Include="Clock\Clock.xaml.cs">
+      <DependentUpon>Clock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Calendar\Calendar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Clock\Clock.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
