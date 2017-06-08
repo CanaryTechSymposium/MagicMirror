@@ -1,77 +1,73 @@
-﻿//using System.Collections.Generic;
-//using System.IO;
-//using System.Net;
-//using Newtonsoft.Json;
-//using System;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using Newtonsoft.Json;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-//namespace MagicMirror.ThirdParty
-//{
-//    public class TwitterAPI
-//    {
-//        string ConsumerKey = "";
-//        string ConsumerSecret = "";
+namespace MagicMirror.ThirdParty
+{
+    public class TwitterAPI
+    {
+        string ConsumerKey = "";
+        string ConsumerSecret = "";
 
-//        // constructor
-//        public TwitterAPI(string key, string secret)
-//        {
-//            ConsumerKey = key;
-//            ConsumerSecret = secret;
-//        }
+        // constructor
+        public TwitterAPI(string key, string secret)
+        {
+            ConsumerKey = key;
+            ConsumerSecret = secret;
+        }
 
-//        string WebRequest(string method, string url, string postData, Dictionary<string, string> headers)
-//        {
+        public  async Task<List<Tweet>> GetTrumpsFeed()
+        {
+            HttpMessageHandler handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
 
-//            HttpWebRequest Request = null;
-//            StreamWriter requestWriter = null;
+            using (HttpClient client = new HttpClient(handler))
+            {
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GetBearerToken().Result.access_token );
 
-//            Request = (HttpWebRequest)HttpWebRequest.Create(url);
-//            Request.Method = method.ToString();
+                HttpResponseMessage response;
 
-//            if (headers != null)
-//            {
-//                foreach (KeyValuePair<string, string> h in headers)
-//                {
-//                    Request.Headers.Add(h.Key, h.Value);
-//                }
-//            }
+                response = await client.GetAsync("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=@realDonaldTrump&count=15");
 
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Tweet>>(json);
+            }
+        }
 
-//            if (method == "POST" || method == "DELETE")
-//            {
-//                Request.ContentType = "application/x-www-form-urlencoded";
+        string GetAccessToken()
+        {
+            var enc = System.Text.Encoding.UTF8;
+            return Convert.ToBase64String(enc.GetBytes(WebUtility.UrlEncode(ConsumerKey) + ":" + WebUtility.UrlEncode(ConsumerSecret)));
+        }
 
-//                // POST the data.
-//                requestWriter = new StreamWriter(Request.GetRequestStream());
-//                try
-//                {
-//                    requestWriter.Write(postData);
-//                }
-//                finally
-//                {
-//                    requestWriter.Close();
-//                    requestWriter = null;
-//                }
-//            }
+       public async Task<TokenBearerResponse> GetBearerToken()
+        {
+            HttpMessageHandler handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
 
-//            return (new StreamReader(Request.GetResponse().GetResponseStream())).ReadToEnd();
-//        }
+            using (HttpClient client = new HttpClient(handler))
+            {
+                client.DefaultRequestHeaders.Add("Authorization", "Basic " + GetAccessToken());
 
-//        public string GetTrumpsFeed()
-//        {
-//            return WebRequest("GET", "https://api.twitter.com/1.1/search/tweets.json?q=@realDonaldTrump", "", new Dictionary<string, string> { { "Authorization", "Bearer " + GetBearerToken().access_token } });
-//        }
+                Dictionary<string, string> formVars = new Dictionary<string, string>();
+                formVars.Add("grant_type", "client_credentials");
 
-//        string GetAccessToken()
-//        {
-//            var enc = System.Text.Encoding.UTF8;
-//            return Convert.ToBase64String(enc.GetBytes(WebUtility.UrlEncode(ConsumerKey) + ":" + WebUtility.UrlEncode(ConsumerSecret)));
-//        }
+                HttpContent content = new FormUrlEncodedContent(formVars);
+                HttpResponseMessage response;
 
-//        TokenBearerResponse GetBearerToken()
-//        {
-//            var res = WebRequest("POST", "https://api.twitter.com/oauth2/token", "grant_type=client_credentials", new Dictionary<string, string> { { "Authorization", "Basic " + GetAccessToken() } });
-//            return JsonConvert.DeserializeObject<TokenBearerResponse>(res);
-//        }
+                response = await client.PostAsync("https://api.twitter.com/oauth2/token", content);
 
-//    }
-//}
+                return JsonConvert.DeserializeObject<TokenBearerResponse>(await response.Content.ReadAsStringAsync());
+            }  
+        }
+
+    }
+}
