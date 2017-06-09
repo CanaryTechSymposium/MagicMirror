@@ -5,6 +5,7 @@
     xmlns:local="using:MagicMirror"
     xmlns:calendar="using:MagicMirror.Calendar"
     xmlns:weather="using:MagicMirror.Weather"
+    xmlns:clock="using:MagicMirror.Clock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -15,7 +16,10 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <calendar:Calendar Grid.Column="0" />
+        <StackPanel Grid.Column="0">
+            <clock:Clock Margin="0,0,0,20" />
+            <calendar:Calendar />
+        </StackPanel>
         <!--<weather:WeatherWidgetView Grid.Column="2" /> -->
 
     </Grid>

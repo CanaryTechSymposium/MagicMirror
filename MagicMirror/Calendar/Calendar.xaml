@@ -28,8 +28,8 @@
                                             <ColumnDefinition Width="80" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{x:Bind StartDisplay}" Foreground="AntiqueWhite" FontSize="16" />
-                                        <TextBlock Grid.Column="1" Text="{x:Bind Description}" Foreground="AntiqueWhite" FontSize="16" FontWeight="Bold" TextWrapping="WrapWholeWords" />
+                                        <TextBlock Text="{x:Bind StartDisplay}" Foreground="WhiteSmoke" FontSize="16" />
+                                        <TextBlock Grid.Column="1" Text="{x:Bind Description}" Foreground="WhiteSmoke" FontSize="16" FontWeight="Bold" TextWrapping="WrapWholeWords" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
