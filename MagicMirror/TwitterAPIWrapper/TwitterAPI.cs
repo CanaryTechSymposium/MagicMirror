@@ -20,7 +20,7 @@ namespace MagicMirror.ThirdParty
             ConsumerSecret = secret;
         }
 
-        public  async Task<List<Tweet>> GetTrumpsFeed()
+        public List<Tweet> GetTrumpsFeed()
         {
             HttpMessageHandler handler = new HttpClientHandler()
             {
@@ -29,13 +29,10 @@ namespace MagicMirror.ThirdParty
 
             using (HttpClient client = new HttpClient(handler))
             {
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GetBearerToken().Result.access_token );
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GetBearerToken().access_token );
 
-                HttpResponseMessage response;
+                string json = client.GetAsync("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=@realDonaldTrump&count=15").Result.Content.ReadAsStringAsync().Result;
 
-                response = await client.GetAsync("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=@realDonaldTrump&count=15");
-
-                var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<List<Tweet>>(json);
             }
         }
@@ -46,7 +43,7 @@ namespace MagicMirror.ThirdParty
             return Convert.ToBase64String(enc.GetBytes(WebUtility.UrlEncode(ConsumerKey) + ":" + WebUtility.UrlEncode(ConsumerSecret)));
         }
 
-       public async Task<TokenBearerResponse> GetBearerToken()
+       public TokenBearerResponse GetBearerToken()
         {
             HttpMessageHandler handler = new HttpClientHandler()
             {
@@ -61,11 +58,10 @@ namespace MagicMirror.ThirdParty
                 formVars.Add("grant_type", "client_credentials");
 
                 HttpContent content = new FormUrlEncodedContent(formVars);
-                HttpResponseMessage response;
+                
+                string json = client.PostAsync("https://api.twitter.com/oauth2/token", content).Result.Content.ReadAsStringAsync().Result;
 
-                response = await client.PostAsync("https://api.twitter.com/oauth2/token", content);
-
-                return JsonConvert.DeserializeObject<TokenBearerResponse>(await response.Content.ReadAsStringAsync());
+                return JsonConvert.DeserializeObject<TokenBearerResponse>(json);
             }  
         }
 

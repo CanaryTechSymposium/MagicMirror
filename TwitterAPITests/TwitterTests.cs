@@ -15,7 +15,7 @@ namespace TwitterAPITests
         {
             TwitterAPI api = new TwitterAPI("", "");
 
-            string response = api.GetBearerToken().Result.access_token ;
+            string response = api.GetBearerToken().access_token ;
 
             Assert.IsFalse(string.IsNullOrEmpty(response));
         }
@@ -25,7 +25,7 @@ namespace TwitterAPITests
         {
             TwitterAPI api = new TwitterAPI("", "");
 
-            List<Tweet> response = api.GetTrumpsFeed().Result;
+            List<Tweet> response = api.GetTrumpsFeed();
 
             Assert.IsNotNull(response);
         }
