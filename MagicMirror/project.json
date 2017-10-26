@@ -1,13 +1,13 @@
 ﻿{
   "dependencies": {
     "Microsoft.AspNet.WebApi.Client": "5.2.3",
-    "Microsoft.Graph": "1.2.1",
+    "Microsoft.Graph": "1.6.2",
     "Microsoft.Identity.Client": "1.0.304142221-alpha",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
-    "Newtonsoft.Json": "9.0.1"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.1",
+    "Newtonsoft.Json": "10.0.3"
   },
   "frameworks": {
-    "uap10.0": {}
+    "uap10.0.10240": {}
   },
   "runtimes": {
     "win10-arm": {},

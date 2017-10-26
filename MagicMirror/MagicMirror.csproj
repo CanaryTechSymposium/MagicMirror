@@ -47,10 +47,11 @@
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
     <OutputPath>bin\ARM\Release\</OutputPath>
@@ -93,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIResponseObjects\TokenBearerResponse.cs" />
+    <Compile Include="APIResponseObjects\Tweet.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -102,17 +104,23 @@
     <Compile Include="Calendar\CalendarEventInterface.cs" />
     <Compile Include="Calendar\ExchangeProvider\AuthenticationHelper.cs" />
     <Compile Include="Calendar\ExchangeProvider\ExchangeCalendarProvider.cs" />
+    <Compile Include="Clock\Clock.xaml.cs">
+      <DependentUpon>Clock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TwitterAPIWrapper\TwitterAPI.cs" />
+    <Compile Include="Twitter\TwitterAPI.cs" />
+    <Compile Include="Twitter\Twitter.xaml.cs">
+      <DependentUpon>Twitter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\CredintialStore.cs" />
     <Compile Include="Weather\BooleanToVisibilityConverter.cs" />
     <Compile Include="Weather\WeatherAPIDataModel.cs" />
     <Compile Include="Weather\WeatherWidgetView.xaml.cs">
       <DependentUpon>WeatherWidgetView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Weather\WeatherWidgetViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -121,6 +129,7 @@
     <None Include="MagicMirror_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CredintialStore.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -139,9 +148,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Clock\Clock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Twitter\Twitter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Weather\WeatherWidgetView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -150,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsIoT, Version=10.0.10240.0">
-      <Name>Windows IoT Extensions for the UWP %28WindowsIoT, Version=10.0.10240.0%29</Name>
+      <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

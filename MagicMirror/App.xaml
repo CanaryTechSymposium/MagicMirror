@@ -3,14 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MagicMirror"
+    xmlns:converter="using:MagicMirror.Weather"
     RequestedTheme="Light">
 
     <Application.Resources>
-        <x:String x:Key="ida:ClientID">02225203-b6b7-4d6e-bfe8-944bb3a66ba1</x:String>
-        <x:String x:Key="ida:ReturnUrl">https://localhost</x:String>
-        <x:String x:Key="ida:AdTenantId">0dbca3a2-57f5-456b-bf23-803dba06bd96</x:String>
-        <x:String x:Key="ida:CalendarUserId">ee64a2f2-21f3-499d-8c86-d669eb276ca7</x:String>
-        
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Application.Resources>
 
 </Application>

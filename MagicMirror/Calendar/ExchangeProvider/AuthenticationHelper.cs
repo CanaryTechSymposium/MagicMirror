@@ -19,9 +19,7 @@ namespace MagicMirror.Calendar.ExchangeProvider
     internal static class AuthenticationHelper
     {
         // The Client ID is used by the application to uniquely identify itself to Microsoft Azure Active Directory (AD).
-        static string clientId = App.Current.Resources["ida:ClientID"].ToString();
-        static string returnUrl = App.Current.Resources["ida:ReturnUrl"].ToString();
-        static string adTenantId = App.Current.Resources["ida:AdTenantId"].ToString();
+        static string returnUrl = @"https://localhost";
 
 
         //public static PublicClientApplication IdentityClientApp = null;
@@ -81,8 +79,10 @@ namespace MagicMirror.Calendar.ExchangeProvider
 
                 if (_clientApp == null)
                 {
-                    var authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, "https://login.microsoftonline.com/{0}/oauth2/v2.0", adTenantId);
-                    _clientApp = new ConfidentialClientApplication(authority, clientId, returnUrl, new ClientCredential("2adNeH9aywjbNyCGYDUbzyv"), null);
+                    var adTenantId = MagicMirror.Utilities.CredintialStore.GetCredintials("calendar-adTenantId");
+                    var authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, "https://login.microsoftonline.com/{0}/oauth2/v2.0", adTenantId.ID);
+                    var clientCredintials = MagicMirror.Utilities.CredintialStore.GetCredintials("calendar-clientId");
+                    _clientApp = new ConfidentialClientApplication(authority, clientCredintials.ID, returnUrl, new ClientCredential(clientCredintials.Secret), null);
                 }
 
                 AuthenticationResult authResult;

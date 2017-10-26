@@ -14,7 +14,6 @@ namespace MagicMirror.Calendar.ExchangeProvider
         private ICalendarEventInterface _calendar;
         private DispatcherTimer _updateTimer;
         private TimeSpan _updateRate;
-        private string calendarUserId = App.Current.Resources["ida:CalendarUserId"].ToString();
 
 
         public ExchangeCalendarProvider(ICalendarEventInterface calendar, TimeSpan updateRate)
@@ -50,28 +49,33 @@ namespace MagicMirror.Calendar.ExchangeProvider
             _updateTimer.Stop();
 
             GetEventsAsync();
+            //_calendar.SetCurrentEvents(GetCurrentEvents());
         }
 
-        public List<CalendarEvent> GetCurrentEvents()
-        {
-            List<CalendarEvent> events = new List<MagicMirror.Calendar.CalendarEvent>();
+        //public List<CalendarEvent> GetCurrentEvents()
+        //{
+        //    List<CalendarEvent> events = new List<MagicMirror.Calendar.CalendarEvent>();
 
-            // Test data
-            ////var start = new DateTime(2017, 3, 17, 11, 0, 0);
-            ////var start = DateTime.Today.AddHours(11);
-            //var start = DateTime.Now;
-            //events.Add(new CalendarEvent { Description = "Tech Symposium", Start = start, End = start.AddHours(2) });
-            //start = start.AddHours(3);
-            //events.Add(new CalendarEvent { Description = "Clean up", Start = start, End = start.AddMinutes(30) });
-            //start = start.AddDays(1).AddHours(4);
-            //events.Add(new CalendarEvent { Description = "Part at Gary's", Start = start, End = start.AddHours(3) });
-            //start = start.AddDays(2).AddHours(-6);
-            //events.Add(new CalendarEvent { Description = "Finish potatoe chips", Start = start, End = start.AddHours(1) });
+        //    // Test data
+        //    ////var start = new DateTime(2017, 3, 17, 11, 0, 0);
+        //    ////var start = DateTime.Today.AddHours(11);
+        //    //var start = DateTime.Now;
+        //    //events.Add(new CalendarEvent { Description = "Tech Symposium", Start = start, End = start.AddHours(2) });
+        //    //start = start.AddHours(3);
+        //    //events.Add(new CalendarEvent { Description = "Clean up", Start = start, End = start.AddMinutes(30) });
+        //    //start = start.AddDays(1).AddHours(4);
+        //    //events.Add(new CalendarEvent { Description = "Party at Gary's", Start = start, End = start.AddHours(3) });
+        //    //start = start.AddDays(2).AddHours(-6);
+        //    //events.Add(new CalendarEvent { Description = "Finish potato chips", Start = start, End = start.AddHours(1) });
 
-            GetEventsAsync();
+        //    //GetEventsAsync();
+        //    //MagicMirror.Utilities.CredintialStore.LoadStore();
+        //    //var start = DateTime.Now;
+        //    //events.Add(new CalendarEvent { Description = MagicMirror.Utilities.CredintialStore.fileLocation, Start = start, End = start.AddHours(2) });
 
-            return events;
-        }
+
+        //    return events;
+        //}
 
         public async void GetEventsAsync()
         {
@@ -85,7 +89,8 @@ namespace MagicMirror.Calendar.ExchangeProvider
                 List<QueryOption> options = new List<QueryOption>();
                 options.Add(new QueryOption("startDateTime", DateTime.Now.ToString("o")));
                 options.Add(new QueryOption("endDateTime", DateTime.Now.AddDays(30).ToString("o")));
-                var myEvents = await graphClient.Users[calendarUserId].CalendarView.Request(options).GetAsync();
+                var calendarUserId = MagicMirror.Utilities.CredintialStore.GetCredintials("calendar-calendarUserId");
+                var myEvents = await graphClient.Users[calendarUserId.ID].CalendarView.Request(options).GetAsync();
 
                 while (true)
                 {

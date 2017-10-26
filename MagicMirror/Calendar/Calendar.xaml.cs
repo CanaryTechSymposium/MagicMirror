@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MagicMirror.Calendar
 {
-    public partial class Calendar : UserControl, INotifyPropertyChanged, ICalendarEventInterface
+    public partial class Calendar : UserControl, ICalendarEventInterface
     {
         private MagicMirror.Calendar.ExchangeProvider.ExchangeCalendarProvider _calendarProvider;
 
@@ -63,8 +63,6 @@ namespace MagicMirror.Calendar
                 AddNextEvent(item);
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void AddNextEvent(Event ev)
         {
