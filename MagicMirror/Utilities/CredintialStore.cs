@@ -35,9 +35,20 @@ namespace MagicMirror.Utilities
             {
                 try
                 {
-                    var folder = Windows.Storage.KnownFolders.MusicLibrary;
-                    var file = await folder.GetFileAsync(settingsFile);
-                    var uri = new Uri(file.Path);
+                    Uri uri = null;
+                    try
+                    {
+                        var folder = Windows.Storage.KnownFolders.MusicLibrary;
+                        var file = await folder.GetFileAsync(settingsFile);
+                        uri = new Uri(file.Path);
+                    }
+                    catch
+                    {
+                        // Support running on the local computer under "build folder"\AppX\Properties
+                        var folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Properties");
+                        var file = await folder.GetFileAsync(settingsFile);
+                        uri = new Uri(file.Path);
+                    }
                     XDocument xDoc = XDocument.Load(uri.ToString());
 
                     store = new Dictionary<string, ApplicationCredintials>();
@@ -52,23 +63,6 @@ namespace MagicMirror.Utilities
                 }
 
             }).Wait();
-
-            //Task.Run(async () =>
-            //{
-            //    //var folder = await StorageFolder.GetFolderFromPathAsync(settingsFolder);
-            //    var folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Properties");
-            //    var file = await folder.GetFileAsync(settingsFile);
-            //    var xmlDoc = await XmlDocument.LoadFromFileAsync(file);
-            //    int i = 0;
-            //}).Wait();
-
-            //Task.Run(() =>
-            //{
-            //    XmlSerializer xml = new XmlSerializer(typeof(ApplicationCredintials[]));
-            //    //Windows.Storage.ApplicationData.Current
-            //    FileStream file = new FileStream(settingsFile, FileMode.Open);
-            //    var settings = xml.Deserialize(file);
-            //}).Wait();
         }
     }
 
