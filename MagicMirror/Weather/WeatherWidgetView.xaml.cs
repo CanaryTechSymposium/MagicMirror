@@ -112,8 +112,8 @@ namespace MagicMirror.Weather
             Status = WeatherConditions.weather;
             Temperature = Math.Round(Convert.ToDecimal(WeatherConditions.temp_f)).ToString();
 
-            //BitmapImage btm = new BitmapImage(new Uri(WeatherConditions.icon_url, UriKind.Absolute));
-            BitmapImage btm = new BitmapImage(new Uri(string.Format("https://icons.wxug.com/i/c/k/{0}.gif", WeatherConditions.icon), UriKind.Absolute));
+            BitmapImage btm = new BitmapImage(new Uri($"ms-appx:///Assets/{MapWeatherUndergroundIconNames(WeatherConditions.icon)}"));
+            //BitmapImage btm = new BitmapImage(new Uri(string.Format("https://icons.wxug.com/i/c/k/{0}.gif", WeatherConditions.icon), UriKind.Absolute));
             StatusImage = btm;
 
         }
@@ -259,6 +259,38 @@ namespace MagicMirror.Weather
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(((MemberExpression)exp.Body).Member.Name));
+        }
+
+        private string MapWeatherUndergroundIconNames(string icon)
+        {
+            switch (icon.ToLower())
+            {
+                case "sunny":
+                case "clear":
+                    return "Sunny.png";
+                case "cloudy":
+                    return "Cloudy.png";
+                case "flurries":
+                    return "Flurries.png";
+                case "hazy":
+                    return "";
+                case "partlycloudy":
+                case "mostlycloudy":
+                case "partlysunny":
+                    return "Mostly_Cloudy.png";
+                case "mostlysunny":
+                    return "Mostly_Sunny.png";
+                case "rain":
+                    return "Rain.png";
+                case "sleet":
+                    return "Freezing_Rain.png";
+                case "snow":
+                    return "Snow.png";
+                case "thunderstorm":
+                    return "Thunderstorms.png";
+                default:
+                    return string.Empty;
+            }
         }
     }
 

@@ -129,6 +129,28 @@
     <None Include="MagicMirror_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Chance_Of_Showers.png" />
+    <Content Include="Assets\Clear.png" />
+    <Content Include="Assets\Cloudy.png" />
+    <Content Include="Assets\Cloudy_Period.png" />
+    <Content Include="Assets\Cloudy_With_Dizzle.png" />
+    <Content Include="Assets\Few_Flurries.png" />
+    <Content Include="Assets\Few_Flurries_Night.png" />
+    <Content Include="Assets\Few_Showers.png" />
+    <Content Include="Assets\Flurries.png" />
+    <Content Include="Assets\Fog.png" />
+    <Content Include="Assets\Freezing_Rain.png" />
+    <Content Include="Assets\Mostly_Cloudy.png" />
+    <Content Include="Assets\Mostly_Sunny.png" />
+    <Content Include="Assets\Rain.png" />
+    <Content Include="Assets\Rain_Or_Snow.png" />
+    <Content Include="Assets\Risk_Of_Thundershowers.png" />
+    <Content Include="Assets\Snow.png" />
+    <Content Include="Assets\Sunny.png" />
+    <Content Include="Assets\Thunderstorms.png" />
+    <Content Include="Assets\Thunder_Showers.png" />
+    <Content Include="Assets\Wet_Flurries.png" />
+    <Content Include="Assets\Wet_Flurries_Night.png" />
     <Content Include="CredintialStore.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
