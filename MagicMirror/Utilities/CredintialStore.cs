@@ -38,11 +38,14 @@ namespace MagicMirror.Utilities
                     Uri uri = null;
                     try
                     {
+                        var musicLibrary = await StorageLibrary.GetLibraryAsync(KnownLibraryId.Music);
+                        System.Diagnostics.Debug.WriteLine(musicLibrary.SaveFolder.Path);
+
                         var folder = Windows.Storage.KnownFolders.MusicLibrary;
                         var file = await folder.GetFileAsync(settingsFile);
                         uri = new Uri(file.Path);
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         // Support running on the local computer under "build folder"\AppX\Properties
                         var folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Properties");
