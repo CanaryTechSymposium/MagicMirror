@@ -6,6 +6,7 @@
     xmlns:calendar="using:MagicMirror.Calendar"
     xmlns:weather="using:MagicMirror.Weather"
     xmlns:clock="using:MagicMirror.Clock"
+    xmlns:countdowntimer="using:MagicMirror.CountDownTimer"
     xmlns:twitter="using:MagicMirror.Twitter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,9 +22,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <clock:Clock Margin="0,0,0,40" />
             <calendar:Calendar Grid.Row="1" />
+            <countdowntimer:CountDownTimer Grid.Row="2" Margin="0,40,0,10" />
         </Grid>
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>

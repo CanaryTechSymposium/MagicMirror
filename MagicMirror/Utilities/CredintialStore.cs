@@ -45,7 +45,7 @@ namespace MagicMirror.Utilities
                         var file = await folder.GetFileAsync(settingsFile);
                         uri = new Uri(file.Path);
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         // Support running on the local computer under "build folder"\AppX\Properties
                         var folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Properties");
