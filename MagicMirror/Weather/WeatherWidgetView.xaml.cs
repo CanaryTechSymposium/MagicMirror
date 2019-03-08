@@ -73,6 +73,9 @@ namespace MagicMirror.Weather
                 nextWeatherUpdateTime = DateTime.Now + nextWeatherUpdateInterval;
             }
 
+            if (weathercondition == null)
+                return;
+
             ContentState nextstate = this.contentstate;
             switch (nextstate)
             {
@@ -106,15 +109,23 @@ namespace MagicMirror.Weather
 
         public async void GetWeather()
         {
-            WeatherConditions = await GetWeatherCondition();
-            LastUpdated = string.Format("Last udpate: {0}", DateTime.Parse(WeatherConditions.observation_time_rfc822));
-            Location = WeatherConditions.display_location.full;
-            Status = WeatherConditions.weather;
-            Temperature = Math.Round(Convert.ToDecimal(WeatherConditions.temp_f)).ToString();
+            try
+            {
+                WeatherConditions = await GetWeatherCondition();
+                LastUpdated = string.Format("Last udpate: {0}", DateTime.Parse(WeatherConditions.observation_time_rfc822));
+                Location = WeatherConditions.display_location.full;
+                Status = WeatherConditions.weather;
+                Temperature = Math.Round(Convert.ToDecimal(WeatherConditions.temp_f)).ToString();
 
-            BitmapImage btm = new BitmapImage(new Uri($"ms-appx:///Assets/{MapWeatherUndergroundIconNames(WeatherConditions.icon)}"));
-            //BitmapImage btm = new BitmapImage(new Uri(string.Format("https://icons.wxug.com/i/c/k/{0}.gif", WeatherConditions.icon), UriKind.Absolute));
-            StatusImage = btm;
+                BitmapImage btm = new BitmapImage(new Uri($"ms-appx:///Assets/{MapWeatherUndergroundIconNames(WeatherConditions.icon)}"));
+                //BitmapImage btm = new BitmapImage(new Uri(string.Format("https://icons.wxug.com/i/c/k/{0}.gif", WeatherConditions.icon), UriKind.Absolute));
+                StatusImage = btm;
+            }
+            catch
+            {
+                LastUpdated = DateTime.Now.ToString();
+                Status = "Error reading weather data";
+            }
 
         }
 
