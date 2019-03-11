@@ -73,7 +73,7 @@ namespace MagicMirror.Weather
                 nextWeatherUpdateTime = DateTime.Now + nextWeatherUpdateInterval;
             }
 
-            if (weathercondition == null)
+            if (weathercondition == null || weathercondition.temperature_string == null)
                 return;
 
             ContentState nextstate = this.contentstate;
