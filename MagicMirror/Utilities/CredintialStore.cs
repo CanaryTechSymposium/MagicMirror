@@ -35,7 +35,7 @@ namespace MagicMirror.Utilities
             {
                 try
                 {
-                    Uri uri = null;
+                    Stream fileStream = null;
                     try
                     {
                         var musicLibrary = await StorageLibrary.GetLibraryAsync(KnownLibraryId.Music);
@@ -43,16 +43,16 @@ namespace MagicMirror.Utilities
 
                         var folder = Windows.Storage.KnownFolders.MusicLibrary;
                         var file = await folder.GetFileAsync(settingsFile);
-                        uri = new Uri(file.Path);
+                        fileStream = await file.OpenStreamForReadAsync();
                     }
-                    catch
+                    catch (Exception)
                     {
                         // Support running on the local computer under "build folder"\AppX\Properties
                         var folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Properties");
                         var file = await folder.GetFileAsync(settingsFile);
-                        uri = new Uri(file.Path);
+                        fileStream = await file.OpenStreamForReadAsync();
                     }
-                    XDocument xDoc = XDocument.Load(uri.ToString());
+                    XDocument xDoc = XDocument.Load(fileStream);
 
                     store = new Dictionary<string, ApplicationCredintials>();
 
