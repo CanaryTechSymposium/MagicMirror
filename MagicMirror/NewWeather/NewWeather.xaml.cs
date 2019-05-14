@@ -14,7 +14,7 @@ namespace MagicMirror.NewWeather
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly byte TEMPERATURE_ROUNDING_DIGITS = 1;
+        private readonly byte TEMPERATURE_ROUNDING_DIGITS = 0;
         private readonly TimeSpan UPDATE_INTERVAL = TimeSpan.FromHours(3);
 
         private DispatcherTimer timer;
@@ -83,8 +83,8 @@ namespace MagicMirror.NewWeather
             {
                 if (DateTime.Now >= nextUpdateTime)
                 {
-                    nextUpdateTime = nextUpdateTime.Add(UPDATE_INTERVAL);
                     UpdateWeatherData();
+                    nextUpdateTime = nextUpdateTime.Add(UPDATE_INTERVAL);
                 }
 
                 UpdateRotatingDisplay(currentWeather);
@@ -123,8 +123,8 @@ namespace MagicMirror.NewWeather
             }
             else
             {
-                WeatherDesc = weatherData.list[1].weather[1].description;
-                iconId = weatherData.list[1].weather[1].icon;
+                WeatherDesc = weatherData.list[1].weather[0].description;
+                iconId = weatherData.list[1].weather[0].icon;
             }
 
             BitmapImage btm = new BitmapImage(new Uri($"http://openweathermap.org/img/w/{iconId}.png"));
