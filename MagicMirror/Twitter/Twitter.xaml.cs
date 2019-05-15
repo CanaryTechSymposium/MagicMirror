@@ -47,7 +47,9 @@ namespace MagicMirror.Twitter
             TwitterAPI api = new TwitterAPI(twitterCredintials.ID, twitterCredintials.Secret);
             foreach (Tweet t in api.GetTrumpsFeed())
             {
-                // TODO: retweets are still truncated. The api has extended tweet text in the retweeted_status object
+                if (t.retweeted_status != null)
+                    t.full_text = t.full_text.Split(":")[0] + ": " + t.retweeted_status.full_text;
+
                 t.full_text = System.Net.WebUtility.HtmlDecode(t.full_text);
                 t.full_text = Regex.Replace(t.full_text, " https://t\\.co/.*", "");
                 t.created_at = DateTime.ParseExact(t.created_at, "ddd MMM dd HH:mm:ss +ffff yyyy", System.Globalization.CultureInfo.CurrentCulture).ToLocalTime().ToString();

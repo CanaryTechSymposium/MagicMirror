@@ -12,6 +12,7 @@ namespace MagicMirror.ThirdParty
         public long id { get; set; }
         public string id_str { get; set; }
         public string full_text { get; set; }
+        public Tweet retweeted_status { get; set; }
     }
 }
 
