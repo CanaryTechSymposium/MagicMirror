@@ -31,7 +31,7 @@ namespace MagicMirror.ThirdParty
             {
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GetBearerToken().access_token );
 
-                string json = client.GetAsync("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=@realDonaldTrump&count=15").Result.Content.ReadAsStringAsync().Result;
+                string json = client.GetAsync("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=@realDonaldTrump&count=15&tweet_mode=extended").Result.Content.ReadAsStringAsync().Result;
 
                 return JsonConvert.DeserializeObject<List<Tweet>>(json);
             }

@@ -24,7 +24,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Padding="0,0,0,5" Text="{x:Bind created_at}" Foreground="Aqua" FontSize="20" />
-                        <TextBlock Grid.Row="1" Padding="0,0,0,5" Text="{x:Bind text}" TextWrapping="Wrap" Foreground="White" FontSize="16" />
+                        <TextBlock Grid.Row="1" Padding="0,0,0,5" Text="{x:Bind full_text}" TextWrapping="Wrap" Foreground="White" FontSize="16" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

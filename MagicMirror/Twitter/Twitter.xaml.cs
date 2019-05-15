@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -46,7 +47,9 @@ namespace MagicMirror.Twitter
             TwitterAPI api = new TwitterAPI(twitterCredintials.ID, twitterCredintials.Secret);
             foreach (Tweet t in api.GetTrumpsFeed())
             {
-                t.text = System.Net.WebUtility.HtmlDecode(t.text);
+                // TODO: retweets are still truncated. The api has extended tweet text in the retweeted_status object
+                t.full_text = System.Net.WebUtility.HtmlDecode(t.full_text);
+                t.full_text = Regex.Replace(t.full_text, " https://t\\.co/.*", "");
                 t.created_at = DateTime.ParseExact(t.created_at, "ddd MMM dd HH:mm:ss +ffff yyyy", System.Globalization.CultureInfo.CurrentCulture).ToLocalTime().ToString();
                 Tweets.Add(t);
             }
