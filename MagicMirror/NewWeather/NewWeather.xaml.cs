@@ -85,13 +85,13 @@ namespace MagicMirror.NewWeather
 
             try
             {
-                if (DateTime.Now >= _nextForecastUpdateTime)
+                if (DateTime.UtcNow >= _nextForecastUpdateTime)
                 {
                     UpdateForecastData();
                     _nextForecastUpdateTime = _nextForecastUpdateTime.Add(FORECAST_UPDATE_INTERVAL);
                 }
 
-                if (DateTime.Now >= _nextWeatherUpdateTime)
+                if (DateTime.UtcNow >= _nextWeatherUpdateTime)
                 {
                     UpdateCurrentData();
                     _nextWeatherUpdateTime = _nextWeatherUpdateTime.Add(WEATHER_UPDATE_INTERVAL);
