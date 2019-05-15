@@ -142,24 +142,17 @@ namespace MagicMirror.NewWeather
                 currentDay = DateTime.Now.Day;
             }
 
+            long tomorrowUnix = new DateTimeOffset(DateTime.Today.AddDays(1)).ToUnixTimeSeconds();
+
             foreach (var data in weatherData.list)
             {
-                DateTime loopDay = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                loopDay = loopDay.AddSeconds(data.dt).ToLocalTime();
-
                 // Done when it reaches tomorrow
-                if (loopDay.Day != DateTime.Now.Day)
+                if (data.dt >= tomorrowUnix)
                     break;
 
-                if (data.main.temp_min < TemperatureLow)
-                {
-                    TemperatureLow = data.main.temp_min;
-                }
+                TemperatureLow = Math.Min(TemperatureLow, data.main.temp_min);
 
-                if (data.main.temp_max > TemperatureHigh)
-                {
-                    TemperatureHigh = data.main.temp_max;
-                }
+                TemperatureHigh = Math.Max(TemperatureHigh, data.main.temp_max);
             }
         }
 
