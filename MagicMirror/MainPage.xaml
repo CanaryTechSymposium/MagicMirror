@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MagicMirror"
     xmlns:calendar="using:MagicMirror.Calendar"
-    xmlns:weather="using:MagicMirror.NewWeather"
+    xmlns:weather="using:MagicMirror.Weather2"
     xmlns:clock="using:MagicMirror.Clock"
     xmlns:countdowntimer="using:MagicMirror.CountDownTimer"
     xmlns:twitter="using:MagicMirror.Twitter"
@@ -33,7 +33,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <weather:NewWeather Margin="0,0,0,40" />
+            <weather:Weather2 Margin="0,0,0,40" />
             <twitter:Twitter Grid.Row="1"/>
         </Grid>
 

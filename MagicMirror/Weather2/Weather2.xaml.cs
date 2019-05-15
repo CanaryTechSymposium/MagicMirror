@@ -8,9 +8,9 @@ using Windows.UI.Xaml.Media.Imaging;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace MagicMirror.NewWeather
+namespace MagicMirror.Weather2
 {
-    public sealed partial class NewWeather : UserControl, INotifyPropertyChanged
+    public sealed partial class Weather2 : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,7 +49,7 @@ namespace MagicMirror.NewWeather
         public ImageSource WeatherIcon { get; set; }
         public string RotatingDisplay { get; set; }
 
-        public NewWeather()
+        public Weather2()
         {
             this.DataContext = this;
             this.InitializeComponent();
@@ -112,14 +112,14 @@ namespace MagicMirror.NewWeather
 
         private void UpdateCurrentData()
         {
-            _currentWeather = OpenWeatherMapAPIInterface.GetCurrentWeather();
+            _currentWeather = OWMAPIInterface.GetCurrentWeather();
 
             Temperature = _currentWeather.main.temp;
         }
 
         private void UpdateForecastData()
         {
-            ForecastWeather weatherData = OpenWeatherMapAPIInterface.GetForcastWeather();
+            ForecastWeather weatherData = OWMAPIInterface.GetForcastWeather();
 
             UpdateWeatherDescription(weatherData);
 

@@ -111,11 +111,11 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewWeather\WeatherAPIDataModels.cs" />
-    <Compile Include="NewWeather\NewWeather.xaml.cs">
-      <DependentUpon>NewWeather.xaml</DependentUpon>
+    <Compile Include="Weather2\OWMDataModels.cs" />
+    <Compile Include="Weather2\Weather2.xaml.cs">
+      <DependentUpon>Weather2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewWeather\OpenWeatherMapAPIInterface.cs" />
+    <Compile Include="Weather2\OWMAPIInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twitter\TwitterAPI.cs" />
     <Compile Include="Twitter\Twitter.xaml.cs">
@@ -161,7 +161,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="NewWeather\NewWeather.xaml">
+    <Page Include="Weather2\Weather2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

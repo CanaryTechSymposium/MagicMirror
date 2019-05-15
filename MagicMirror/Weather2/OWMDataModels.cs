@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MagicMirror.NewWeather
+namespace MagicMirror.Weather2
 {
     public class ForecastWeather
     {

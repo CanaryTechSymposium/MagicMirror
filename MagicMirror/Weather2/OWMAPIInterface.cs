@@ -2,9 +2,9 @@
 using System;
 using System.Net.Http;
 
-namespace MagicMirror.NewWeather
+namespace MagicMirror.Weather2
 {
-    public static class OpenWeatherMapAPIInterface
+    public static class OWMAPIInterface
     {
         private static readonly string CITY_ID = "5200055";
 
