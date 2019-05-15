@@ -89,9 +89,9 @@ namespace MagicMirror.NewWeather
 
                 UpdateRotatingDisplay(currentWeather);
             }
-            catch
+            catch (Exception ex)
             {
-                WeatherDesc = "Error reading weather data";
+                WeatherDesc = $"Error reading weather data: {ex.Message}";
                 WeatherIcon = null;
             }
 
