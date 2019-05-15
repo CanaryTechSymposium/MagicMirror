@@ -18,13 +18,13 @@ namespace MagicMirror.NewWeather
         private readonly TimeSpan WEATHER_UPDATE_INTERVAL = TimeSpan.FromMinutes(10);
         private readonly TimeSpan FORECAST_UPDATE_INTERVAL = TimeSpan.FromHours(3);
 
-        private DispatcherTimer timer;
+        private DispatcherTimer _timer;
 
-        private int currentDay;
-        private DisplayRotation currentRotation;
-        private CurrentWeather currentWeather;
-        private DateTime nextWeatherUpdateTime;
-        private DateTime nextForecastUpdateTime;
+        private int _currentDay;
+        private DisplayRotation _currentRotation;
+        private CurrentWeather _currentWeather;
+        private DateTime _nextWeatherUpdateTime;
+        private DateTime _nextForecastUpdateTime;
 
         private double _temperature;
         private double _temperatureLow;
@@ -54,8 +54,8 @@ namespace MagicMirror.NewWeather
             this.DataContext = this;
             this.InitializeComponent();
 
-            currentDay = -1;
-            currentRotation = DisplayRotation.Wind;
+            _currentDay = -1;
+            _currentRotation = DisplayRotation.Wind;
             WeatherDesc = "Loading...";
 
             InitializeTimer();
@@ -63,7 +63,7 @@ namespace MagicMirror.NewWeather
 
         private void InitializeTimer()
         {
-            nextWeatherUpdateTime = DateTime.UtcNow;
+            _nextWeatherUpdateTime = DateTime.UtcNow;
 
             // The forecast API updates every 3 hours starting at midnight UTC
             int hoursUntilUpdate = FORECAST_UPDATE_INTERVAL.Hours - (DateTime.UtcNow.Hour % FORECAST_UPDATE_INTERVAL.Hours);
@@ -71,33 +71,33 @@ namespace MagicMirror.NewWeather
             // Update is this hour
             if (hoursUntilUpdate == 3)
                 hoursUntilUpdate = 0;
-            nextForecastUpdateTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + hoursUntilUpdate - FORECAST_UPDATE_INTERVAL.Hours, 15, 0);
+            _nextForecastUpdateTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour + hoursUntilUpdate - FORECAST_UPDATE_INTERVAL.Hours, 15, 0);
 
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(5);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(5);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
         private void Timer_Tick(object sender, object e)
         {
-            timer.Stop();
+            _timer.Stop();
 
             try
             {
-                if (DateTime.Now >= nextForecastUpdateTime)
+                if (DateTime.Now >= _nextForecastUpdateTime)
                 {
                     UpdateForecastData();
-                    nextForecastUpdateTime = nextForecastUpdateTime.Add(FORECAST_UPDATE_INTERVAL);
+                    _nextForecastUpdateTime = _nextForecastUpdateTime.Add(FORECAST_UPDATE_INTERVAL);
                 }
 
-                if (DateTime.Now >= nextWeatherUpdateTime)
+                if (DateTime.Now >= _nextWeatherUpdateTime)
                 {
                     UpdateCurrentData();
-                    nextWeatherUpdateTime = nextWeatherUpdateTime.Add(WEATHER_UPDATE_INTERVAL);
+                    _nextWeatherUpdateTime = _nextWeatherUpdateTime.Add(WEATHER_UPDATE_INTERVAL);
                 }
 
-                UpdateRotatingDisplay(currentWeather);
+                UpdateRotatingDisplay(_currentWeather);
             }
             catch (Exception ex)
             {
@@ -107,14 +107,14 @@ namespace MagicMirror.NewWeather
 
             UpdateBindingProperties();
 
-            timer.Start();
+            _timer.Start();
         }
 
         private void UpdateCurrentData()
         {
-            currentWeather = OpenWeatherMapAPIInterface.GetCurrentWeather();
+            _currentWeather = OpenWeatherMapAPIInterface.GetCurrentWeather();
 
-            Temperature = currentWeather.main.temp;
+            Temperature = _currentWeather.main.temp;
         }
 
         private void UpdateForecastData()
@@ -148,12 +148,12 @@ namespace MagicMirror.NewWeather
         private void UpdateHighLowTemperatures(ForecastWeather weatherData)
         {
             // New day, new high and low temperatures
-            if (currentDay != DateTime.Now.Day)
+            if (_currentDay != DateTime.Now.Day)
             {
                 TemperatureLow = double.MaxValue;
                 TemperatureHigh = double.MinValue;
 
-                currentDay = DateTime.Now.Day;
+                _currentDay = DateTime.Now.Day;
             }
 
             long tomorrowUnix = new DateTimeOffset(DateTime.Today.AddDays(1)).ToUnixTimeSeconds();
@@ -172,19 +172,19 @@ namespace MagicMirror.NewWeather
 
         private void UpdateRotatingDisplay(CurrentWeather weatherData)
         {
-            switch (currentRotation)
+            switch (_currentRotation)
             {
                 case DisplayRotation.Clouds:
                     RotatingDisplay = $"{weatherData.clouds.all}% cloudy";
-                    currentRotation = DisplayRotation.Humidity;
+                    _currentRotation = DisplayRotation.Humidity;
                     break;
                 case DisplayRotation.Humidity:
                     RotatingDisplay = $"{weatherData.main.humidity}% humidity";
-                    currentRotation = DisplayRotation.Wind;
+                    _currentRotation = DisplayRotation.Wind;
                     break;
                 case DisplayRotation.Wind:
                     RotatingDisplay = $"{weatherData.wind.speed} mph wind";
-                    currentRotation = DisplayRotation.Clouds;
+                    _currentRotation = DisplayRotation.Clouds;
                     break;
                 default:
                     break;
