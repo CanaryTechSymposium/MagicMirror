@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Linq.Expressions;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -48,6 +50,7 @@ namespace MagicMirror.Weather2
         public string WeatherDesc { get; set; }
         public ImageSource WeatherIcon { get; set; }
         public string RotatingDisplay { get; set; }
+        public string ErrorText { get; set; }
 
         public Weather2()
         {
@@ -98,16 +101,39 @@ namespace MagicMirror.Weather2
                 }
 
                 UpdateRotatingDisplay(_currentWeather);
+
+                MainGrid.Visibility = Visibility.Visible;
+                ErrorText = "";
             }
             catch (Exception ex)
             {
-                WeatherDesc = $"Error reading weather data: {ex.Message}";
-                WeatherIcon = null;
+                LogErrors(ex);
             }
 
             UpdateBindingProperties();
 
             _timer.Start();
+        }
+
+        private void LogErrors(Exception ex)
+        {
+            try
+            {
+                System.Threading.Tasks.Task.Run(async () =>
+                {
+                    var folder = Windows.Storage.KnownFolders.MusicLibrary;
+                    if (!folder.GetFilesAsync().AsTask().Result.Any(el => el.Name == "error.log"))
+                    {
+                        await folder.CreateFileAsync("error.log");
+                    }
+                    var file = await folder.GetFileAsync("error.log");
+                    await Windows.Storage.FileIO.AppendLinesAsync(file, new List<string>() { DateTime.Now.ToString(), ex.Message, ex.StackTrace });
+                });
+            }
+            catch { }
+
+            MainGrid.Visibility = Visibility.Collapsed;
+            ErrorText = $"Error: {ex.Message}";
         }
 
         private void UpdateCurrentData()
@@ -199,6 +225,7 @@ namespace MagicMirror.Weather2
             OnPropertyChanged(() => WeatherDesc);
             OnPropertyChanged(() => WeatherIcon);
             OnPropertyChanged(() => RotatingDisplay);
+            OnPropertyChanged(() => ErrorText);
         }
 
         public void OnPropertyChanged<T>(Expression<Func<T>> exp)

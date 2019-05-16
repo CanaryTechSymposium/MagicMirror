@@ -9,36 +9,39 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Text="{Binding Temperature}" Foreground="White" FontSize="26"/>
-                <TextBlock Text="°F" Foreground="White" FontSize="26"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TemperatureLow}" Foreground="White" FontSize="26"/>
+        <Grid x:Name="MainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Temperature}" Foreground="White" FontSize="26"/>
                     <TextBlock Text="°F" Foreground="White" FontSize="26"/>
                 </StackPanel>
-                <TextBlock Text="|" Foreground="White" FontSize="26" Margin="3,0,3,0"/>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding TemperatureHigh}" Foreground="White" FontSize="26"/>
-                    <TextBlock Text="°F" Foreground="White" FontSize="26"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TemperatureLow}" Foreground="White" FontSize="26"/>
+                        <TextBlock Text="°F" Foreground="White" FontSize="26"/>
+                    </StackPanel>
+                    <TextBlock Text="|" Foreground="White" FontSize="26" Margin="3,0,3,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TemperatureHigh}" Foreground="White" FontSize="26"/>
+                        <TextBlock Text="°F" Foreground="White" FontSize="26"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="{Binding WeatherIcon}" Width="50" Height="50"/>
-            <TextBlock Text="{Binding WeatherDesc}" Foreground="White" FontSize="26"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2">
-            <TextBlock Text="{Binding RotatingDisplay}" Foreground="White" FontSize="26" HorizontalAlignment="Center"/>
-        </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Image Source="{Binding WeatherIcon}" Width="50" Height="50"/>
+                <TextBlock Text="{Binding WeatherDesc}" Foreground="White" FontSize="26"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="{Binding RotatingDisplay}" Foreground="White" FontSize="26" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="{Binding ErrorText}" Foreground="White" FontSize="16" TextWrapping="Wrap"/>
     </Grid>
 
 </UserControl>
