@@ -138,18 +138,26 @@ namespace MagicMirror.Weather2
 
         private void UpdateCurrentData()
         {
-            _currentWeather = OWMAPIInterface.GetCurrentWeather();
+            try
+            {
+                _currentWeather = OWMAPIInterface.GetCurrentWeather();
 
-            Temperature = _currentWeather.main.temp;
+                Temperature = _currentWeather.main.temp;
+            }
+            catch { }
         }
 
         private void UpdateForecastData()
         {
-            ForecastWeather weatherData = OWMAPIInterface.GetForcastWeather();
+            try
+            {
+                ForecastWeather weatherData = OWMAPIInterface.GetForcastWeather();
 
-            UpdateWeatherDescription(weatherData);
+                UpdateWeatherDescription(weatherData);
 
-            UpdateHighLowTemperatures(weatherData);
+                UpdateHighLowTemperatures(weatherData);
+            }
+            catch { }
         }
 
         private void UpdateWeatherDescription(ForecastWeather weatherData)
