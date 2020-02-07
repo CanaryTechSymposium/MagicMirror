@@ -11,6 +11,7 @@
         <StackPanel>
             <TextBlock Text="{Binding Heading}" Foreground="White" FontSize="36" HorizontalAlignment="Center" />
             <TextBlock Text="{Binding Duration}" Foreground="White" FontSize="20" HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding WorkingDaysDuration}" Foreground="White" FontSize="20" HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
 </UserControl>
